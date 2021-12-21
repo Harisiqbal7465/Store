@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/mainListFragment">
+
+    <fragment
+        android:id="@+id/mainListFragment"
+        android:name="com.example.store.ui.fragments.MainListFragment"
+        android:label="fragment_main_list"
+        tools:layout="@layout/fragment_main_list" />
+    <fragment
+        android:id="@+id/stockFragment"
+        android:name="com.example.store.ui.fragments.StockFragment"
+        android:label="fragment_stock"
+        tools:layout="@layout/fragment_stock" />
+    <fragment
+        android:id="@+id/expenseFragment"
+        android:name="com.example.store.ui.fragments.ExpenseFragment"
+        android:label="fragment_expense"
+        tools:layout="@layout/fragment_expense" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        android:name="com.example.store.ui.fragments.NotificationFragment"
+        android:label="fragment_notification"
+        tools:layout="@layout/fragment_notification" />
+</navigation>

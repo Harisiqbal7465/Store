@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">Store</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="list">List</string>
+    <string name="stock">Stock</string>
+    <string name="expense">Expense</string>
+    <string name="notification">Notification</string>
+    <string name="add_button">add button</string>
+    <string-array name="list_type">
+        <item>"Custom List"</item>
+        <item>"Company List"</item>
+    </string-array>
 </resources>
