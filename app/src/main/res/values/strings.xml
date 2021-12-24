@@ -7,6 +7,14 @@
     <string name="expense">Expense</string>
     <string name="notification">Notification</string>
     <string name="add_button">add button</string>
+    <string name="cancel">Cancel</string>
+    <string name="list_name">List Name</string>
+    <string name="list_info">List Info</string>
+    <string name="error_input_empty">The fields must not be empty</string>
+    <string name="all_ready_exist">All Ready Exist</string>
+    <string name="company_list">Company List</string>
+    <string name="custom_list">Custom List</string>
+    <string name="done">Done</string>
     <string-array name="list_type">
         <item>"Custom List"</item>
         <item>"Company List"</item>

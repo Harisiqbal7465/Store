@@ -1,6 +1,7 @@
 package com.example.store.di
 
 import android.content.Context
+import com.example.store.repository.MainRepository
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,5 +16,7 @@ class AppModule {
     @Singleton
     fun provideContext(@ApplicationContext context: Context) = context
 
-
+    @Provides
+    @Singleton
+    fun provideRepository() = MainRepository()
 }

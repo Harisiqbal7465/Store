@@ -2,6 +2,7 @@ package com.example.store.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
@@ -22,7 +23,22 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = binding.bottomNavigationView
         val navHostFragment = supportFragmentManager.findFragmentById(R.id.fragments) as NavHostFragment
         val navController = navHostFragment.navController
-        val appBarConfiguration = AppBarConfiguration(setOf(R.id.mainListFragment,R.id.stockFragment,R.id.expenseFragment))
+
+        navController.addOnDestinationChangedListener { controller, destination, arguments ->
+            when (destination.id) {
+                R.id.customListFragment -> {
+                    binding.bottomNavigationView.visibility = View.GONE
+                }
+                R.id.companyListFragment -> {
+                    binding.bottomNavigationView.visibility = View.GONE
+                }
+                else -> {
+                    binding.bottomNavigationView.visibility = View.VISIBLE
+                }
+            }
+        }
+
+        val appBarConfiguration = AppBarConfiguration(setOf(R.id.mainListFragment,R.id.stockFragment,R.id.expenseFragment,R.id.notificationFragment))
         setupActionBarWithNavController(navController, appBarConfiguration)
         bottomNavigationView.setupWithNavController(navController)
 

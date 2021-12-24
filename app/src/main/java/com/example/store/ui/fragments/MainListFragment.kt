@@ -1,20 +1,29 @@
 package com.example.store.ui.fragments
 
-import android.app.AlertDialog
-import android.app.Dialog
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.store.R
 import com.example.store.databinding.FragmentMainListBinding
-import com.example.store.ui.dialogs.ListTypeDialog
+import com.example.store.ui.MainViewModel
+import com.example.store.ui.adapters.MainListInfoAdapter
+import com.example.store.utils.Resource
+import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collectLatest
 
+@AndroidEntryPoint
 class MainListFragment : Fragment() {
     private var _binding: FragmentMainListBinding? = null
     private val binding get() = _binding!!
-    
+    private lateinit var viewModel: MainViewModel
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -22,21 +31,41 @@ class MainListFragment : Fragment() {
         ): View {
         _binding = FragmentMainListBinding.inflate(layoutInflater,container,false)
 
-        val listType = requireActivity().resources.getStringArray(R.array.list_type)
-        var selectedTypePosition = 0
+        val mainListAdapter = MainListInfoAdapter{listType ->
+            if(listType == requireContext().resources.getString(R.string.custom_list)) {
+                findNavController().navigate(R.id.action_mainListFragment_to_customListFragment)
+            } else {
+                findNavController().navigate(R.id.action_mainListFragment_to_companyListFragment)
+            }
+        }
+
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        viewModel.getAllListOfMainList()
+        lifecycleScope.launchWhenCreated {
+            viewModel.listOfMainListStatus.collectLatest { resources ->
+                when (resources) {
+                    is Resource.Success -> {
+                        binding.recyclerView.apply {
+                            mainListAdapter.setValue(resources.data ?: emptyList())
+                            adapter = mainListAdapter
+                            layoutManager = LinearLayoutManager(requireContext())
+                        }
+                    }
+                    is Resource.Loading -> {
+
+                    }
+                    is Resource.Error -> {
+                        val bottomNavView: BottomNavigationView = activity?.findViewById(R.id.bottomNavigationView)!!
+                        Snackbar.make(bottomNavView, resources.message ?: "An unexpected error occured", Snackbar.LENGTH_SHORT).apply {
+                            anchorView = bottomNavView
+                        }.show()
+                    }
+                }
+            }
+        }
 
         binding.fButtonAdd.setOnClickListener {
-            AlertDialog.Builder(requireActivity())
-                .setTitle("List Type")
-                .setSingleChoiceItems(listType,0){_,selectedPosition->
-                    selectedTypePosition = selectedPosition
-                }
-                .setPositiveButton("Yes"){_,_->
-
-                }
-                .setNegativeButton("No"){dialog,_->
-                    dialog.dismiss()
-                }.show()
+            findNavController().navigate(R.id.action_mainListFragment_to_bottomSheetDialogMainListFragment)
         }
 
         return binding.root
