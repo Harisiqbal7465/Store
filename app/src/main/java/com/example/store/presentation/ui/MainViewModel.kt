@@ -1,9 +1,9 @@
-package com.example.store.ui
+package com.example.store.presentation.ui
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.store.data.entities.MainList
+import com.example.store.repository.data.entities.MainList
 import com.example.store.repository.MainRepository
 import com.example.store.utils.Constant.TAG
 import com.example.store.utils.Resource

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilWeigh"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        app:endIconMode="clear_text"
+        app:layout_constraintEnd_toStartOf="@+id/tilPrice"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etWeigh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="15"
+            android:hint="@string/weight"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/tilPrice"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        app:endIconMode="clear_text"
+        app:layout_constraintBottom_toBottomOf="@+id/tilWeigh"
+        app:layout_constraintEnd_toStartOf="@+id/IBtnClose"
+        app:layout_constraintStart_toEndOf="@+id/tilWeigh"
+        app:layout_constraintTop_toTopOf="@+id/tilWeigh">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/etPrice"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:ems="15"
+            android:hint="@string/price"
+            android:inputType="text" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <ImageButton
+        android:id="@+id/IBtnClose"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="16dp"
+        android:layout_weight="1"
+        android:background="@android:color/transparent"
+        android:contentDescription="@string/ibnclose"
+        android:src="@drawable/ic_close_24"
+        app:layout_constraintBottom_toBottomOf="@+id/tilPrice"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/tilPrice"
+        app:layout_constraintTop_toTopOf="@+id/tilPrice" />
+</androidx.constraintlayout.widget.ConstraintLayout>

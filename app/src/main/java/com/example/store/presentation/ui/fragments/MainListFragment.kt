@@ -1,4 +1,4 @@
-package com.example.store.ui.fragments
+package com.example.store.presentation.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -11,8 +11,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.store.R
 import com.example.store.databinding.FragmentMainListBinding
-import com.example.store.ui.MainViewModel
-import com.example.store.ui.adapters.MainListInfoAdapter
+import com.example.store.presentation.ui.MainViewModel
+import com.example.store.presentation.ui.adapters.MainListInfoAdapter
 import com.example.store.utils.Resource
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -25,17 +25,25 @@ class MainListFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var viewModel: MainViewModel
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View {
-        _binding = FragmentMainListBinding.inflate(layoutInflater,container,false)
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentMainListBinding.inflate(layoutInflater, container, false)
 
-        val mainListAdapter = MainListInfoAdapter{listType ->
-            if(listType == requireContext().resources.getString(R.string.custom_list)) {
-                findNavController().navigate(R.id.action_mainListFragment_to_customListFragment)
+        val mainListAdapter = MainListInfoAdapter { listType, listName ->
+            if (listType == requireContext().resources.getString(R.string.custom_list)) {
+                findNavController().navigate(
+                    MainListFragmentDirections.actionMainListFragmentToCustomListFragment(
+                        listName
+                    )
+                )
             } else {
-                findNavController().navigate(R.id.action_mainListFragment_to_companyListFragment)
+                findNavController().navigate(
+                    MainListFragmentDirections.actionMainListFragmentToCompanyListFragment(
+                        listName
+                    )
+                )
             }
         }
 
@@ -55,8 +63,13 @@ class MainListFragment : Fragment() {
 
                     }
                     is Resource.Error -> {
-                        val bottomNavView: BottomNavigationView = activity?.findViewById(R.id.bottomNavigationView)!!
-                        Snackbar.make(bottomNavView, resources.message ?: "An unexpected error occured", Snackbar.LENGTH_SHORT).apply {
+                        val bottomNavView: BottomNavigationView =
+                            activity?.findViewById(R.id.bottomNavigationView)!!
+                        Snackbar.make(
+                            bottomNavView,
+                            resources.message ?: "An unexpected error occured",
+                            Snackbar.LENGTH_SHORT
+                        ).apply {
                             anchorView = bottomNavView
                         }.show()
                     }
@@ -70,7 +83,7 @@ class MainListFragment : Fragment() {
 
         return binding.root
     }
-    
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

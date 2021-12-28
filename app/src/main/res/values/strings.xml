@@ -15,6 +15,12 @@
     <string name="company_list">Company List</string>
     <string name="custom_list">Custom List</string>
     <string name="done">Done</string>
+    <string name="fb_mic">fb_mic</string>
+    <string name="ibnclose">ibnClose</string>
+    <string name="price">Price</string>
+    <string name="weight">Weight</string>
+    <string name="item_name">Item Name</string>
+    <string name="more">more</string>
     <string-array name="list_type">
         <item>"Custom List"</item>
         <item>"Company List"</item>

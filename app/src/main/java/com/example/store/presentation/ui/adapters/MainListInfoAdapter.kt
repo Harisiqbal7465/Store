@@ -1,13 +1,13 @@
-package com.example.store.ui.adapters
+package com.example.store.presentation.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.example.store.data.entities.MainList
+import com.example.store.repository.data.entities.MainList
 import com.example.store.databinding.ListMainListBinding
 
 class MainListInfoAdapter(
-    private val listener :(String) -> Unit
+    private val listener :(String,String) -> Unit
 ): RecyclerView.Adapter<MainListInfoAdapter.ViewHolder>(){
 
     private var mainList = emptyList<MainList>()
@@ -31,7 +31,7 @@ class MainListInfoAdapter(
             tvMainListName.text = currentItem.listName
             tvMainListType.text = currentItem.listType
             mainList.setOnClickListener {
-                listener(currentItem.listType)
+                listener(currentItem.listType,currentItem.listName)
             }
         }
     }

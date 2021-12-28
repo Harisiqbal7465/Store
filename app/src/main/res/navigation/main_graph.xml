@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mainListFragment"
-        android:name="com.example.store.ui.fragments.MainListFragment"
+        android:name="com.example.store.presentation.ui.fragments.MainListFragment"
         android:label="Main List"
         tools:layout="@layout/fragment_main_list" >
         <action
@@ -22,22 +22,22 @@
     </fragment>
     <fragment
         android:id="@+id/stockFragment"
-        android:name="com.example.store.ui.fragments.StockFragment"
+        android:name="com.example.store.presentation.ui.fragments.StockFragment"
         android:label="Stock"
         tools:layout="@layout/fragment_stock" />
     <fragment
         android:id="@+id/expenseFragment"
-        android:name="com.example.store.ui.fragments.ExpenseFragment"
+        android:name="com.example.store.presentation.ui.fragments.ExpenseFragment"
         android:label="Expense"
         tools:layout="@layout/fragment_expense" />
     <fragment
         android:id="@+id/notificationFragment"
-        android:name="com.example.store.ui.fragments.NotificationFragment"
+        android:name="com.example.store.presentation.ui.fragments.NotificationFragment"
         android:label="Notification"
         tools:layout="@layout/fragment_notification" />
     <fragment
         android:id="@+id/customListFragment"
-        android:name="com.example.store.ui.fragments.CustomListFragment"
+        android:name="com.example.store.presentation.ui.fragments.CustomListFragment"
         android:label="fragment_custom_list"
         tools:layout="@layout/fragment_custom_list" >
         <argument
@@ -46,7 +46,7 @@
     </fragment>
     <dialog
         android:id="@+id/bottomSheetDialogMainListFragment"
-        android:name="com.example.store.ui.dialogs.BottomSheetDialogMainListFragment"
+        android:name="com.example.store.presentation.ui.dialogs.BottomSheetDialogMainListFragment"
         android:label="fragment_bottom_sheet_dialog_main_list"
         tools:layout="@layout/fragment_bottom_sheet_dialog_main_list" >
         <action
@@ -56,7 +56,7 @@
     </dialog>
     <fragment
         android:id="@+id/companyListFragment"
-        android:name="com.example.store.ui.fragments.CompanyListFragment"
+        android:name="com.example.store.presentation.ui.fragments.CompanyListFragment"
         android:label="fragment_company_list"
         tools:layout="@layout/fragment_company_list" >
         <argument android:name="companyListName" />

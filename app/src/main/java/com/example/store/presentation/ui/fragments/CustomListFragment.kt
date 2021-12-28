@@ -1,11 +1,10 @@
-package com.example.store.ui.fragments
+package com.example.store.presentation.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.store.R
 import com.example.store.databinding.FragmentCustomListBinding
 
 class CustomListFragment : Fragment() {

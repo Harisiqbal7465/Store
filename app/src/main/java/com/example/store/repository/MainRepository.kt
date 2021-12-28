@@ -1,14 +1,10 @@
 package com.example.store.repository
 
-import android.util.Log
-import com.example.store.data.entities.MainList
-import com.example.store.ui.utils.safeCall
-import com.example.store.utils.Constant.TAG
+import com.example.store.repository.data.entities.MainList
+import com.example.store.presentation.ui.utils.safeCall
 import com.example.store.utils.Resource
 import com.google.firebase.firestore.FirebaseFirestore
-import com.squareup.okhttp.Dispatcher
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
 

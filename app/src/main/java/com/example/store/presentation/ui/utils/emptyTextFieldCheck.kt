@@ -1,4 +1,4 @@
-package com.example.store.ui.utils
+package com.example.store.presentation.ui.utils
 
 fun emptyTextFieldCheck(vararg textFields: String): Boolean{
     for (item in textFields) {

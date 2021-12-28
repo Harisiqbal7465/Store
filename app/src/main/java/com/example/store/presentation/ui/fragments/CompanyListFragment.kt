@@ -1,28 +1,27 @@
-package com.example.store.ui.fragments
+package com.example.store.presentation.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.store.R
-import com.example.store.databinding.FragmentExpenseBinding
+import com.example.store.databinding.FragmentCompanyListBinding
 
 
-class ExpenseFragment : Fragment() {
-    private var _binding: FragmentExpenseBinding? = null
+class CompanyListFragment : Fragment() {
+    private var _binding: FragmentCompanyListBinding? = null
     private val binding get() = _binding!!
-    
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View {
-        _binding = FragmentExpenseBinding.inflate(layoutInflater,container,false)
-        
+        _binding = FragmentCompanyListBinding.inflate(layoutInflater,container,false)
+
         return binding.root
     }
-    
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

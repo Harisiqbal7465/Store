@@ -1,4 +1,4 @@
-package com.example.store.ui
+package com.example.store.presentation.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -6,7 +6,6 @@ import android.view.View
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
 import com.example.store.R
 import com.example.store.databinding.ActivityMainBinding
 import dagger.hilt.android.AndroidEntryPoint

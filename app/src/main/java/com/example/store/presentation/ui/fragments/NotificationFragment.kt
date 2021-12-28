@@ -1,15 +1,14 @@
-package com.example.store.ui.fragments
+package com.example.store.presentation.ui.fragments
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.example.store.R
-import com.example.store.databinding.FragmentStockBinding
+import com.example.store.databinding.FragmentNotificationBinding
 
-class StockFragment : Fragment() {
-    private var _binding: FragmentStockBinding? = null
+class NotificationFragment : Fragment() {
+    private var _binding: FragmentNotificationBinding? = null
     private val binding get() = _binding!!
     
     override fun onCreateView(
@@ -17,7 +16,7 @@ class StockFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
         ): View {
-        _binding = FragmentStockBinding.inflate(layoutInflater,container,false)
+        _binding = FragmentNotificationBinding.inflate(layoutInflater,container,false)
         
         return binding.root
     }
