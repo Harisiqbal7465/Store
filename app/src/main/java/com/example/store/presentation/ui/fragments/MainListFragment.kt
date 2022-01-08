@@ -54,7 +54,7 @@ class MainListFragment : Fragment() {
                 when (resources) {
                     is Resource.Success -> {
                         binding.recyclerView.apply {
-                            mainListAdapter.setValue(resources.data ?: emptyList())
+                            mainListAdapter.mainList = resources.data ?: emptyList()
                             adapter = mainListAdapter
                             layoutManager = LinearLayoutManager(requireContext())
                         }

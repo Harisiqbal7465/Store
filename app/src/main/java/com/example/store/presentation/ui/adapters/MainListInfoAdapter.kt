@@ -2,6 +2,8 @@ package com.example.store.presentation.ui.adapters
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.store.repository.data.entities.MainList
 import com.example.store.databinding.ListMainListBinding
@@ -9,8 +11,6 @@ import com.example.store.databinding.ListMainListBinding
 class MainListInfoAdapter(
     private val listener :(String,String) -> Unit
 ): RecyclerView.Adapter<MainListInfoAdapter.ViewHolder>(){
-
-    private var mainList = emptyList<MainList>()
 
     class ViewHolder(val binding: ListMainListBinding): RecyclerView.ViewHolder(binding.root)
 
@@ -35,10 +35,21 @@ class MainListInfoAdapter(
             }
         }
     }
-
     override fun getItemCount() = mainList.size
-    fun setValue(list: List<MainList>) {
-        this.mainList = list
-        notifyDataSetChanged()
+
+
+    private val diffCalBack = object: DiffUtil.ItemCallback<MainList>(){
+        override fun areItemsTheSame(oldItem: MainList, newItem: MainList): Boolean {
+            return oldItem.listName == newItem.listName
+        }
+
+        override fun areContentsTheSame(oldItem: MainList, newItem: MainList): Boolean {
+            return oldItem == newItem
+        }
     }
+
+    private val differ = AsyncListDiffer(this, diffCalBack)
+    var mainList: List<MainList>
+        get() = differ.currentList
+        set(value){ differ.submitList(value)}
 }

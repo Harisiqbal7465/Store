@@ -43,6 +43,9 @@
         <argument
             android:name="customListName"
             app:argType="string" />
+        <action
+            android:id="@+id/action_customListFragment_to_customListAddFragment"
+            app:destination="@id/customListAddFragment" />
     </fragment>
     <dialog
         android:id="@+id/bottomSheetDialogMainListFragment"
@@ -61,4 +64,9 @@
         tools:layout="@layout/fragment_company_list" >
         <argument android:name="companyListName" />
     </fragment>
+    <fragment
+        android:id="@+id/customListAddFragment"
+        android:name="com.example.store.presentation.ui.fragments.CustomListAddFragment"
+        android:label="fragment_custom_list_add"
+        tools:layout="@layout/fragment_custom_list_add" />
 </navigation>
