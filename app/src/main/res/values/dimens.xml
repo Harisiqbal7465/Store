@@ -2,4 +2,7 @@
 <resources>
     <dimen name="letter_size_32dp">32sp</dimen>
     <dimen name="highlight_text_size_24dp">24sp</dimen>
+    <dimen name="small_text_size_18">18sp</dimen>
+    <dimen name="small_text_size_16">16sp</dimen>
+    <dimen name="small_text_size_24">24sp</dimen>
 </resources>

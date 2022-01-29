@@ -1,4 +1,4 @@
-package com.example.store.presentation.ui.utils
+package com.example.store.utils
 
 import com.example.store.utils.Resource
 

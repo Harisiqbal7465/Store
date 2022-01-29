@@ -5,8 +5,9 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.example.store.repository.data.entities.MainList
 import com.example.store.databinding.ListMainListBinding
+import com.example.store.repository.data.entities.MainListData
+
 
 class MainListInfoAdapter(
     private val listener :(String,String) -> Unit
@@ -25,9 +26,8 @@ class MainListInfoAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        val currentItem = mainList[position]
+        val currentItem = mainDataList[position]
         holder.binding.apply {
-            tvCircleFirstText.text = currentItem.listName[0].toString()
             tvMainListName.text = currentItem.listName
             tvMainListType.text = currentItem.listType
             mainList.setOnClickListener {
@@ -35,21 +35,21 @@ class MainListInfoAdapter(
             }
         }
     }
-    override fun getItemCount() = mainList.size
+    override fun getItemCount() = mainDataList.size
 
 
-    private val diffCalBack = object: DiffUtil.ItemCallback<MainList>(){
-        override fun areItemsTheSame(oldItem: MainList, newItem: MainList): Boolean {
+    private val diffCalBack = object: DiffUtil.ItemCallback<MainListData>(){
+        override fun areItemsTheSame(oldItem: MainListData, newItem: MainListData): Boolean {
             return oldItem.listName == newItem.listName
         }
 
-        override fun areContentsTheSame(oldItem: MainList, newItem: MainList): Boolean {
+        override fun areContentsTheSame(oldItem: MainListData, newItem: MainListData): Boolean {
             return oldItem == newItem
         }
     }
 
     private val differ = AsyncListDiffer(this, diffCalBack)
-    var mainList: List<MainList>
+    var mainDataList: List<MainListData>
         get() = differ.currentList
         set(value){ differ.submitList(value)}
 }

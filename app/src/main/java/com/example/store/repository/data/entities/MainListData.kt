@@ -1,6 +1,6 @@
 package com.example.store.repository.data.entities
 
-data class MainList(
+data class MainListData(
     val listName: String = "",
     val listType: String = "",
 )

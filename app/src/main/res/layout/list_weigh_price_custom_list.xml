@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/tilWeigh"
+        android:id="@+id/tilWeight"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -14,18 +14,20 @@
         android:layout_marginTop="8dp"
         android:layout_marginBottom="8dp"
         app:endIconMode="clear_text"
+        app:suffixText=" g"
+        app:helperTextTextColor="@color/red"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/tilPrice"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etWeigh"
+            android:id="@+id/etWeight"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:ems="15"
             android:hint="@string/weight"
-            android:inputType="text" />
+            android:inputType="number" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -36,11 +38,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        app:helperTextTextColor="@color/red"
         app:endIconMode="clear_text"
-        app:layout_constraintBottom_toBottomOf="@+id/tilWeigh"
+        app:prefixText="Rs "
+        app:layout_constraintBottom_toBottomOf="@+id/tilWeight"
         app:layout_constraintEnd_toStartOf="@+id/iBtnClose"
-        app:layout_constraintStart_toEndOf="@+id/tilWeigh"
-        app:layout_constraintTop_toTopOf="@+id/tilWeigh">
+        app:layout_constraintStart_toEndOf="@+id/tilWeight"
+        app:layout_constraintTop_toTopOf="@+id/tilWeight">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPrice"
@@ -48,7 +52,7 @@
             android:layout_height="match_parent"
             android:ems="15"
             android:hint="@string/price"
-            android:inputType="text" />
+            android:inputType="number" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -58,7 +62,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:layout_marginEnd="16dp"
-        android:visibility="gone"
         android:layout_weight="1"
         android:background="@android:color/transparent"
         android:contentDescription="@string/ibnclose"

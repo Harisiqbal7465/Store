@@ -14,11 +14,14 @@
             android:id="@+id/action_mainListFragment_to_customListFragment"
             app:destination="@id/customListFragment" />
         <action
-            android:id="@+id/action_mainListFragment_to_bottomSheetDialogMainListFragment"
-            app:destination="@id/bottomSheetDialogMainListFragment" />
-        <action
             android:id="@+id/action_mainListFragment_to_companyListFragment"
             app:destination="@id/companyListFragment" />
+        <argument
+            android:name="customListName"
+            app:argType="string" />
+        <action
+            android:id="@+id/action_mainListFragment_to_mainListAddFragment"
+            app:destination="@id/mainListAddFragment" />
     </fragment>
     <fragment
         android:id="@+id/stockFragment"
@@ -38,7 +41,7 @@
     <fragment
         android:id="@+id/customListFragment"
         android:name="com.example.store.presentation.ui.fragments.CustomListFragment"
-        android:label="fragment_custom_list"
+        android:label="{customListName}"
         tools:layout="@layout/fragment_custom_list" >
         <argument
             android:name="customListName"
@@ -46,27 +49,40 @@
         <action
             android:id="@+id/action_customListFragment_to_customListAddFragment"
             app:destination="@id/customListAddFragment" />
+        <action
+            android:id="@+id/action_customListFragment_to_customListDetailFragment"
+            app:destination="@id/customListDetailFragment" />
     </fragment>
     <dialog
         android:id="@+id/bottomSheetDialogMainListFragment"
         android:name="com.example.store.presentation.ui.dialogs.BottomSheetDialogMainListFragment"
         android:label="fragment_bottom_sheet_dialog_main_list"
-        tools:layout="@layout/fragment_bottom_sheet_dialog_main_list" >
-        <action
-            android:id="@+id/action_bottomSheetDialogMainListFragment_to_mainListFragment"
-            app:destination="@id/mainListFragment"
-            app:popUpTo="@id/mainListFragment" />
-    </dialog>
+        tools:layout="@layout/fragment_bottom_sheet_dialog_main_list" />
     <fragment
         android:id="@+id/companyListFragment"
         android:name="com.example.store.presentation.ui.fragments.CompanyListFragment"
-        android:label="fragment_company_list"
+        android:label="{companyListName}"
         tools:layout="@layout/fragment_company_list" >
-        <argument android:name="companyListName" />
+        <argument android:name="companyListName"
+            app:argType="string" />
     </fragment>
     <fragment
         android:id="@+id/customListAddFragment"
         android:name="com.example.store.presentation.ui.fragments.CustomListAddFragment"
-        android:label="fragment_custom_list_add"
-        tools:layout="@layout/fragment_custom_list_add" />
+        android:label="@string/add_custom_list"
+        tools:layout="@layout/fragment_custom_list_add" >
+        <argument
+            android:name="customListName"
+            app:argType="string" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainListAddFragment"
+        android:name="com.example.store.presentation.ui.fragments.MainListAddFragment"
+        android:label="List Info"
+        tools:layout="@layout/fragment_main_list_add" />
+    <fragment
+        android:id="@+id/customListDetailFragment"
+        android:name="com.example.store.presentation.ui.fragments.CustomListDetailFragment"
+        android:label="fragment_custom_list_detail"
+        tools:layout="@layout/fragment_custom_list_detail" />
 </navigation>

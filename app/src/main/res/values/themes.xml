@@ -11,7 +11,6 @@
         <item name="colorOnSecondary">@color/black</item>
         <!-- Status bar color. -->
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
-        <item name="android:navigationBarColor">@color/white</item>
         <!-- Customize your theme here. -->
         <item name="floatingActionButtonStyle">@style/FloatingActionButtonStyle</item>
     </style>
@@ -23,5 +22,11 @@
     <style name="FabShapeStyle2" parent="ShapeAppearance.MaterialComponents.SmallComponent">
         <item name="cornerSize">20%</item>
     </style>
-
+    
+    <style name="Collapse_Headline6">
+        <item name="android:textSize">@dimen/small_text_size_24</item>
+    </style>
+    <style name="expend_Heading6">
+        <item name="android:textSize">48dp</item>
+    </style>
 </resources>
