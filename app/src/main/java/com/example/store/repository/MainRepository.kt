@@ -64,11 +64,13 @@ class MainRepository {
     }
 
     fun getALlListOfCustomList(listName: String) = flow<Resource<List<CustomListData>>> {
-        var main: ListenerRegistration? = null
         try {
+            Log.i(TAG, "list name = ${listName}")
             emit(Resource.Loading<List<CustomListData>>())
-            val result = mainList.document(listName).collection(listName).get().await()
+            val result = mainList.document(listName).collection(listName)
+                .get().await()
                 .toObjects(CustomListData::class.java).toList()
+            Log.i(TAG, "custom list = ${result.onEach { it.listName }}")
             emit(Resource.Success(result))
         } catch (e: Exception) {
             Log.i(TAG, "repository get list error = ${e.message}")
@@ -93,41 +95,41 @@ class MainRepository {
             )
         }
     }*/
-    /* @ExperimentalCoroutinesApi
-     fun getALlListOfCustomList(listName: String) = callbackFlow<Resource<List<CustomListData>>> {
-         var main: ListenerRegistration? = null
-         try {
-             trySend(Resource.Loading<List<CustomListData>>())
-             //val result = mainList.document(listName).collection(listName).get().await()
-             //Resource.Success(result)
-            // trySend(Resource.Success<List<CustomListData>>(result))
-             main = mainList.document(listName).collection(listName).addSnapshotListener { value, error ->
-                 error?.let { errorMessage ->
-                     trySend(
-                         Resource.Error<List<CustomListData>>(
-                             errorMessage.message ?: "An unexpected error occured"
-                         )
-                     )
-                     cancel(errorMessage.message.toString())
-                 }
-                 value?.let {
-                     val list = it.toObjects(CustomListData::class.java)
-                     Log.i(TAG, "repository get list = $list")
-                     trySend(Resource.Success<List<CustomListData>>(list.toList()))
-                 }
-             }
+    /*@ExperimentalCoroutinesApi
+    fun getALlListOfCustomList(listName: String) = callbackFlow<Resource<List<CustomListData>>> {
+        var main: ListenerRegistration? = null
+        try {
+            trySend(Resource.Loading<List<CustomListData>>())
+            //val result = mainList.document(listName).collection(listName).get().await()
+            //Resource.Success(result)
+           // trySend(Resource.Success<List<CustomListData>>(result))
+            main = mainList.document(listName).collection(listName).addSnapshotListener { value, error ->
+                error?.let { errorMessage ->
+                    trySend(
+                        Resource.Error<List<CustomListData>>(
+                            errorMessage.message ?: "An unexpected error occured"
+                        )
+                    )
+                    cancel(errorMessage.message.toString())
+                }
+                value?.let {
+                    val list = it.toObjects(CustomListData::class.java)
+                    Log.i(TAG, "repository get list = ${list}")
+                    trySend(Resource.Success<List<CustomListData>>(list.toList()))
+                }
+            }
 
-         } catch (e: Exception) {
-             Log.i(TAG, "repository get list error = ${e.message}")
-             trySend(
-                 Resource.Error<List<CustomListData>>(
-                     e.message ?: "An unexpected error occured"
-                 )
-             )
-         } finally {
-             awaitClose { main!!.remove() }
-         }
-     }*/
+        } catch (e: Exception) {
+            Log.i(TAG, "repository get list error = ${e.message}")
+            trySend(
+                Resource.Error<List<CustomListData>>(
+                    e.message ?: "An unexpected error occured"
+                )
+            )
+        } finally {
+            awaitClose { main!!.remove() }
+        }
+    }*/
 
     @ExperimentalCoroutinesApi
     fun getAllListOfMainList() = callbackFlow<Resource<List<MainListData>>> {

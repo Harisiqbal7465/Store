@@ -26,6 +26,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
+        android:textDirection="rtl"
         android:text="Custom list"
         android:textSize="@dimen/small_text_size_16"
         app:layout_constraintEnd_toEndOf="@+id/tvMainListName"

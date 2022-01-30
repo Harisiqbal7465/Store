@@ -6,14 +6,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import com.example.store.R
 import com.example.store.databinding.ListWeightPriceBinding
-import com.example.store.repository.data.entities.CustomListData
 import com.example.store.utils.Constant.TAG
 
 class WeighPriceListAdapter(
     context: Context,
-    val list: CustomListData
-) : ArrayAdapter<CustomListData>(context, 0) {
+    private val weightList: List<Int>,
+    private val priceList: List<Int>
+) : ArrayAdapter<Int>(context, R.layout.list_weight_price,priceList) {
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
         val binding: ListWeightPriceBinding
@@ -27,16 +28,16 @@ class WeighPriceListAdapter(
         } else {
             binding = ListWeightPriceBinding.bind(  row)
         }
-
-        Log.i(TAG," price ${list.priceList[position]}")
-        Log.i(TAG," weight ${list.weightList[position]}")
-
-        binding.tvPrice.text = list.priceList[position]
-        binding.tvWeight.text = list.weightList[position]
+         ("Rs ${priceList[position]}").also {
+             binding.tvPrice.text = it
+         }
+        ("${weightList[position]}g").also {
+            binding.tvWeight.text = it
+        }
         return row
     }
 
     override fun getCount(): Int {
-        return list.priceList.size
+        return priceList.size
     }
 }

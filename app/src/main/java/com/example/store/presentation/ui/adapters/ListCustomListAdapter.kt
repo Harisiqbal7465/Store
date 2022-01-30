@@ -1,5 +1,6 @@
 package com.example.store.presentation.ui.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
@@ -10,7 +11,7 @@ import com.example.store.repository.data.entities.CustomListData
 
 
 class ListCustomListAdapter(
-    private val listener :() -> Unit
+    private val listener :(CustomListData) -> Unit
 ): RecyclerView.Adapter<ListCustomListAdapter.ViewHolder>(){
 
     class ViewHolder(val binding: ListCustomListBinding): RecyclerView.ViewHolder(binding.root)
@@ -29,10 +30,12 @@ class ListCustomListAdapter(
         val currentItem = customListData[position]
         holder.binding.apply {
             tvCustomItemName.text = currentItem.listName
+            Log.i("size","${currentItem.priceList[0]}")
+            Log.i("size","${currentItem.weightList[0]}")
             ("Rs ${currentItem.priceList[0]}").also { tvPrice.text = it }
             ("${currentItem.weightList[0]}g").also { tvWeight.text = it }
             mainList.setOnClickListener {
-                listener()
+                listener(currentItem)
             }
         }
     }

@@ -1,7 +1,6 @@
 package com.example.store.presentation.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -13,9 +12,9 @@ import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.store.R
 import com.example.store.databinding.FragmentCustomListBinding
+import com.example.store.presentation.ui.MainActivity
 import com.example.store.presentation.ui.adapters.ListCustomListAdapter
 import com.example.store.presentation.ui.viewmodels.CustomListViewModel
-import com.example.store.utils.Constant.TAG
 import com.example.store.utils.Resource
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -30,23 +29,31 @@ class CustomListFragment : Fragment() {
     private lateinit var customListAdapter: ListCustomListAdapter
     private lateinit var viewModel: CustomListViewModel
     override fun onCreateView(
-            inflater: LayoutInflater,
-            container: ViewGroup?,
-            savedInstanceState: Bundle?
-        ): View {
-        _binding = FragmentCustomListBinding.inflate(layoutInflater,container,false)
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View {
+        _binding = FragmentCustomListBinding.inflate(layoutInflater, container, false)
+
         viewModel = ViewModelProvider(this)[CustomListViewModel::class.java]
+        (requireActivity() as MainActivity).setupActionBar(binding.toolBar)
+
         customListAdapter = ListCustomListAdapter {
-            findNavController().navigate(R.id.action_customListFragment_to_customListDetailFragment)
-        }
-        adapterInilized()
-        binding.fbListAdd.setOnClickListener {
-           findNavController().navigate(
-               CustomListFragmentDirections.actionCustomListFragmentToCustomListAddFragment(args.customListName)
-           )
+            findNavController().navigate(
+                CustomListFragmentDirections.actionCustomListFragmentToCustomListDetailFragment(it)
+            )
         }
 
-        return binding.root
+        adapterInilized()
+        return binding.apply {
+            fbListAdd.setOnClickListener {
+                findNavController().navigate(
+                    CustomListFragmentDirections.actionCustomListFragmentToCustomListAddFragment(
+                        args.customListName
+                    )
+                )
+            }
+        }.root
     }
 
     private fun adapterInilized() {
@@ -81,15 +88,14 @@ class CustomListFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        Log.i(TAG,"On Resume")
         viewModel.getAllList(args.customListName)
     }
 
     override fun onStart() {
         super.onStart()
-        Log.i(TAG,"On Start")
         adapterInilized()
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

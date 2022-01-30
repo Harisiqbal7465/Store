@@ -52,6 +52,9 @@
         <action
             android:id="@+id/action_customListFragment_to_customListDetailFragment"
             app:destination="@id/customListDetailFragment" />
+        <action
+            android:id="@+id/action_customListFragment_to_mainListDetailFragment"
+            app:destination="@id/mainListDetailFragment" />
     </fragment>
     <dialog
         android:id="@+id/bottomSheetDialogMainListFragment"
@@ -84,5 +87,16 @@
         android:id="@+id/customListDetailFragment"
         android:name="com.example.store.presentation.ui.fragments.CustomListDetailFragment"
         android:label="fragment_custom_list_detail"
-        tools:layout="@layout/fragment_custom_list_detail" />
+        tools:layout="@layout/fragment_custom_list_detail" >
+        <argument
+            android:name="customList"
+            app:argType="com.example.store.repository.data.entities.CustomListData" />
+        <action
+            android:id="@+id/action_customListDetailFragment_to_customListAddFragment"
+            app:destination="@id/customListAddFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/mainListDetailFragment"
+        android:name="com.example.store.presentation.ui.fragments.MainListDetailFragment"
+        android:label="MainListDetailFragment" />
 </navigation>

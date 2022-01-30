@@ -96,8 +96,8 @@ class CustomListAddFragment : Fragment() {
     }
 
     private fun validateWeighAndPrice() {
-        val priceList = mutableListOf<String>()
-        val weightList = mutableListOf<String>()
+        val priceList = mutableListOf<Int>()
+        val weightList = mutableListOf<Int>()
 
         var v: View?
         val count = binding.priceWeightList.childCount
@@ -152,8 +152,8 @@ class CustomListAddFragment : Fragment() {
                     weightEditText.editText!!.text.toString()
                 )
             ) {
-                priceList.add(priceEditText.editText!!.text.toString())
-                weightList.add(weightEditText.editText!!.text.toString())
+                priceList.add(priceEditText.editText!!.text.toString().toInt())
+                weightList.add(weightEditText.editText!!.text.toString().toInt())
             }
         }
 

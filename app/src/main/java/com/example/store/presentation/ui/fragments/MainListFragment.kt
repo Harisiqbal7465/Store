@@ -13,6 +13,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.store.R
 import com.example.store.databinding.FragmentMainListBinding
+import com.example.store.presentation.ui.MainActivity
 import com.example.store.presentation.ui.viewmodels.MainViewModel
 import com.example.store.presentation.ui.adapters.MainListInfoAdapter
 import com.example.store.utils.Resource
@@ -35,6 +36,8 @@ class MainListFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMainListBinding.inflate(layoutInflater, container, false)
+
+        (requireActivity() as MainActivity).setupActionBar(binding.toolBar)
 
         val mainListAdapter = MainListInfoAdapter { listType, listName ->
             if (listType == requireContext().resources.getString(R.string.custom_list)) {
