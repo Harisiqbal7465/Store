@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory
+        app:iconSpaceReserved="false"
+        app:title="@string/main_list_info">
+        <EditTextPreference
+            app:iconSpaceReserved="false"
+            app:key="list_name"
+            app:title="@string/main_list_name"
+            app:useSimpleSummaryProvider="true"/>
+        <ListPreference
+            app:iconSpaceReserved="false"
+            app:defaultValue="@string/custom_list"
+            app:entries="@array/list_entries"
+            app:entryValues="@array/list_values"
+            app:key="list_type"
+            android:title="Main List Type"
+            app:useSimpleSummaryProvider="true"/>
+    </PreferenceCategory>
 </PreferenceScreen>

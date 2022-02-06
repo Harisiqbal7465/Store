@@ -1,6 +1,6 @@
 package com.example.store.presentation.ui.fragments
 
-import android.os.Bundle
+import  android.os.Bundle
 import android.util.Log
 import android.view.*
 import android.widget.RadioButton
@@ -8,12 +8,15 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.store.R
 import com.example.store.databinding.FragmentMainListAddBinding
+import com.example.store.presentation.ui.MainActivity
 import com.example.store.presentation.ui.utils.emptyTextFieldCheck
 import com.example.store.presentation.ui.viewmodels.MainViewModel
 import com.example.store.repository.data.entities.MainListData
-import com.example.store.utils.Constant
+import com.example.store.utils.Constant.TAG
 import com.example.store.utils.Resource
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,8 +30,9 @@ class MainListAddFragment : Fragment() {
 
     private var _binding: FragmentMainListAddBinding? = null
     private val binding get() = _binding!!
-    private var rbCheckText: String? = null
     private lateinit var viewModel: MainViewModel
+    private val args: MainListAddFragmentArgs by navArgs()
+    private lateinit var editState: EditingState
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,6 +41,10 @@ class MainListAddFragment : Fragment() {
     ): View {
         _binding = FragmentMainListAddBinding.inflate(layoutInflater, container, false)
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        (requireActivity() as MainActivity).setupActionBar(binding.includeToolbar.  toolBar)
+
+        editState = args.mainListId?.let { EditingState.EXISTING_MAIN_LIST } ?: EditingState.NEW_MAIN_LIST
+
         return binding.root
     }
 
@@ -55,14 +63,7 @@ class MainListAddFragment : Fragment() {
         when (item.itemId) {
             R.id.btnSave -> {
                 binding.tilMainList.helperText = ""
-                if (emptyTextFieldCheck(binding.etMainListName.text.toString())) {
-                    binding.tilMainList.helperText =
-                        requireContext().resources.getString(R.string.error_input_empty)
-                } else {
-
-                    viewModel.checkExistingMainList(getFirstLetterCapital(binding.etMainListName.text.toString()))
-                    checkExistingMainList()
-                }
+                saveButtonAction()
             }
         }
         return super.onOptionsItemSelected(item)
@@ -73,30 +74,77 @@ class MainListAddFragment : Fragment() {
             if (char.isLowerCase()) char.titlecase(Locale.getDefault()) else char.toString()
         }
 
-    private fun checkExistingMainList() {
-        lifecycleScope.launchWhenCreated {
+    private fun saveButtonAction() {
+        val listName = getFirstLetterCapital(binding.etMainListName.text.toString())
+        val listType = binding.rbGroup.findViewById<RadioButton>(binding.rbGroup.checkedRadioButtonId).text.toString()
+        val mainList =
+            MainListData(
+                listName = listName,
+                listType = listType
+            )
+        when (editState) {
+            EditingState.EXISTING_MAIN_LIST -> {
+                binding.apply {
+                    etMainListName.setText(args.mainListId?.listName)
+                    val id =  when (args.mainListId?.listName) {
+                        requireContext().getString(R.string.custom_list) -> {
+                            rbGroup.getChildAt(0).id
+                        }
+                        requireContext().getString(R.string.company_list) -> {
+                            rbGroup.getChildAt(1).id
+                        }
+                        else -> {
+                            rbGroup.getChildAt(0).id
+                        }
+                    }
+                    rbGroup.check(id)
+                    Log.i(TAG,"in add list ")
+
+                    checkValidation{
+
+                    }
+                }
+            }
+            EditingState.NEW_MAIN_LIST -> {
+                checkValidation {
+                    viewModel.addMainList(mainListData = mainList)
+                }
+            }
+        }
+    }
+
+    private fun checkValidation(saveAction: () -> Unit){
+        if (emptyTextFieldCheck(binding.etMainListName.text.toString())) {
+            binding.tilMainList.helperText =
+                requireContext().resources.getString(R.string.error_input_empty)
+        } else {
+
+            viewModel.checkExistingMainList(getFirstLetterCapital(binding.etMainListName.text.toString()))
+
+            saveData(saveAction)
+
+
+        }
+    }
+
+    private fun saveData(saveAction: () -> Unit) {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.checkExistingMainListDataStatus.collectLatest { resources ->
                 val data = resources.data
                 when (resources) {
                     is Resource.Success -> {
-                        rbCheckText =
-                            binding.rbGroup.findViewById<RadioButton>(binding.rbGroup.checkedRadioButtonId).text.toString()
+
                         data?.let {
-                            val listName =
-                                getFirstLetterCapital(binding.etMainListName.text.toString())
                             if (resources.data) {
+                                Log.i(TAG,"already exist")
                                 binding.tilMainList.helperText =
                                     requireContext().resources.getString(R.string.all_ready_exist)
                                 binding.etMainListName.selectAll()
                                 binding.etMainListName.isFocusable = true
                             } else {
-                                val mainList =
-                                    MainListData(
-                                        listName = listName,
-                                        listType = rbCheckText!!
-                                    )
-                                viewModel.addMainList(mainListData = mainList)
-
+                                Log.i(TAG,"in else block")
+                              saveAction()
+                                findNavController().popBackStack()
                             }
                         }
                     }
@@ -113,5 +161,10 @@ class MainListAddFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    enum class EditingState {
+        EXISTING_MAIN_LIST,
+        NEW_MAIN_LIST
     }
 }

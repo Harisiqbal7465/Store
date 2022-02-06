@@ -6,9 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.example.store.repository.MainRepository
 import com.example.store.repository.data.entities.CustomListData
 import com.example.store.utils.Constant.TAG
-import com.example.store.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch

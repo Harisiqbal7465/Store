@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.navArgs
 import com.example.store.databinding.ListWeighPriceCustomListBinding
+import com.example.store.presentation.ui.MainActivity
 import com.example.store.presentation.ui.viewmodels.CustomListAddViewModel
 import com.example.store.repository.data.entities.CustomListData
 import com.example.store.utils.Constant.TAG
@@ -32,6 +33,7 @@ class CustomListAddFragment : Fragment() {
     ): View {
         _binding = FragmentCustomListAddBinding.inflate(layoutInflater, container, false)
         addViewModel = ViewModelProvider(this)[CustomListAddViewModel::class.java]
+        (requireActivity() as MainActivity).setupActionBar(binding.includeToolbar.toolBar)
         binding.btnMore.setOnClickListener {
             if (emptyTextFieldCheck(binding.etItemName.text.toString())) {
                 Snackbar.make(

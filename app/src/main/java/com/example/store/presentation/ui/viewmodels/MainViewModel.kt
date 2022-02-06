@@ -1,10 +1,12 @@
 package com.example.store.presentation.ui.viewmodels
 
 import android.util.Log
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.store.repository.data.entities.MainListData
 import com.example.store.repository.MainRepository
+import com.example.store.repository.data.entities.MainListData
+import com.example.store.utils.Constant.TAG
 import com.example.store.utils.Resource
 import com.google.firebase.firestore.FirebaseFirestore
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -18,7 +20,7 @@ import javax.inject.Inject
 @ExperimentalCoroutinesApi
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val repository: MainRepository
+    private val repository: MainRepository,
 ) : ViewModel() {
 
     init {
@@ -41,6 +43,7 @@ class MainViewModel @Inject constructor(
             val mainList = FirebaseFirestore.getInstance().collection("mainList")
             val result = mainList.get().await().toObjects(MainListData::class.java).toList()
             repository.getAllListOfMainList().collect {
+                Log.i(TAG,"list ${it.data}")
                 _listOfMainListStatus.value = it
             }
         }
@@ -55,6 +58,7 @@ class MainViewModel @Inject constructor(
     }
 
     fun addMainList(mainListData: MainListData) {
+        Log.i(TAG,"in viewmodel add list")
         viewModelScope.launch {
             repository.insertMainList(mainListData).collect()
         }

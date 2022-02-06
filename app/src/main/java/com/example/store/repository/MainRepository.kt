@@ -1,21 +1,19 @@
 package com.example.store.repository
 
 import android.util.Log
-import com.example.store.repository.data.entities.MainListData
 import com.example.store.repository.data.entities.CustomListData
+import com.example.store.repository.data.entities.MainListData
 import com.example.store.utils.Constant.TAG
 import com.example.store.utils.Resource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.tasks.await
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.withContext
+
 
 class MainRepository {
     private val mainList = FirebaseFirestore.getInstance().collection("mainList")
@@ -23,140 +21,131 @@ class MainRepository {
     fun insertMainList(mainListData: MainListData) = flow<Resource<Any>> {
         try {
             Log.i(TAG, "insert data $mainListData")
-            emit(Resource.Loading<Any>())
+            emit(Resource.Loading())
             mainList.document(mainListData.listName).set(mainListData).await()
-            emit(Resource.Success<Any>(mainListData))
+            emit(Resource.Success(mainListData))
         } catch (e: Exception) {
-            emit(Resource.Error<Any>(e.message ?: "An unexpected error occured"))
+            emit(Resource.Error(e.message ?: "An unexpected error occurred"))
         }
     }
 
     fun insertCustomList(collectionName: String, customListData: CustomListData) =
-        flow<Resource<Any>> {
+        flow{
             try {
-                emit(Resource.Loading<Any>())
+                emit(Resource.Loading())
                 mainList.document(collectionName).collection(collectionName)
                     .document(customListData.listName)
                     .set(customListData).await()
-                emit(Resource.Success<Any>(Any()))
+                emit(Resource.Success(Any()))
             } catch (e: Exception) {
                 emit(
-                    Resource.Error<Any>(
-                        e.message ?: "An unexpected error occured"
+                    Resource.Error(
+                        e.message ?: "An unexpected error occurred"
                     )
                 )
             }
         }
 
 
-    fun allReadyExistAddMainList(listName: String) = flow<Resource<Boolean>> {
+    fun allReadyExistAddMainList(listName: String) = flow {
         try {
-            emit(Resource.Loading<Boolean>())
-            val result = mainList.document(listName).get().await().exists()
-            emit(Resource.Success<Boolean>(result))
+            emit(Resource.Loading())
+            val result = mainList.whereEqualTo("listName", listName).get().await()
+                .toObjects(MainListData::class.java).toList()
+            Log.i(TAG,"already exist ${result.isNotEmpty()}")
+            emit(Resource.Success(result.isNotEmpty()))
         } catch (e: Exception) {
             emit(
-                Resource.Error<Boolean>(
-                    e.message ?: "An unexpected error occured"
+                Resource.Error(
+                    e.message ?: "An unexpected error occurred"
                 )
             )
         }
     }
 
-    fun getALlListOfCustomList(listName: String) = flow<Resource<List<CustomListData>>> {
+    fun getMainListInfo(listId: String) = flow<Resource<MainListData>> {
         try {
-            Log.i(TAG, "list name = ${listName}")
-            emit(Resource.Loading<List<CustomListData>>())
-            val result = mainList.document(listName).collection(listName)
-                .get().await()
-                .toObjects(CustomListData::class.java).toList()
-            Log.i(TAG, "custom list = ${result.onEach { it.listName }}")
+            emit(Resource.Loading())
+            val result = mainList.document(listId).get().await().toObject(MainListData::class.java)!!
             emit(Resource.Success(result))
         } catch (e: Exception) {
-            Log.i(TAG, "repository get list error = ${e.message}")
             emit(
-                Resource.Error<List<CustomListData>>(
-                    e.message ?: "An unexpected error occured"
+                Resource.Error(
+                    e.message ?: "An unexpected error occurred"
                 )
             )
         }
     }
 
-    /*fun getAllListOfMainList() = flow<Resource<List<MainListData>>> {
-        try {
-            emit(Resource.Loading<List<MainListData>>())
-            val result = mainList.get().await().toObjects(MainListData::class.java).toList()
-            emit(Resource.Success<List<MainListData>>(result))
-        } catch (e: Exception) {
-            emit(
-                Resource.Error<List<MainListData>>(
-                    e.message ?: "An unexpected error occured"
-                )
-            )
-        }
-    }*/
-    /*@ExperimentalCoroutinesApi
+    @ExperimentalCoroutinesApi
     fun getALlListOfCustomList(listName: String) = callbackFlow<Resource<List<CustomListData>>> {
         var main: ListenerRegistration? = null
         try {
-            trySend(Resource.Loading<List<CustomListData>>())
-            //val result = mainList.document(listName).collection(listName).get().await()
-            //Resource.Success(result)
-           // trySend(Resource.Success<List<CustomListData>>(result))
-            main = mainList.document(listName).collection(listName).addSnapshotListener { value, error ->
-                error?.let { errorMessage ->
-                    trySend(
-                        Resource.Error<List<CustomListData>>(
-                            errorMessage.message ?: "An unexpected error occured"
+            trySend(Resource.Loading())
+            main = mainList.document(listName).collection(listName)
+                .addSnapshotListener { value, error ->
+                    error?.let { errorMessage ->
+                        trySend(
+                            Resource.Error(
+                                errorMessage.message ?: "An unexpected error occurred"
+                            )
                         )
-                    )
-                    cancel(errorMessage.message.toString())
+                        cancel(errorMessage.message.toString())
+                    }
+                    value?.let {
+                        val list = it.toObjects(CustomListData::class.java)
+                        trySend(Resource.Success(list.toList()))
+                    }
                 }
-                value?.let {
-                    val list = it.toObjects(CustomListData::class.java)
-                    Log.i(TAG, "repository get list = ${list}")
-                    trySend(Resource.Success<List<CustomListData>>(list.toList()))
-                }
-            }
 
         } catch (e: Exception) {
             Log.i(TAG, "repository get list error = ${e.message}")
             trySend(
-                Resource.Error<List<CustomListData>>(
-                    e.message ?: "An unexpected error occured"
+                Resource.Error(
+                    e.message ?: "An unexpected error occurred"
                 )
             )
         } finally {
             awaitClose { main!!.remove() }
         }
-    }*/
+    }
 
     @ExperimentalCoroutinesApi
     fun getAllListOfMainList() = callbackFlow<Resource<List<MainListData>>> {
         var main: ListenerRegistration? = null
         try {
-            trySend(Resource.Loading<List<MainListData>>())
+            trySend(Resource.Loading())
             main = mainList.addSnapshotListener { value, error ->
                 error?.let { errorMessage ->
                     trySend(
-                        Resource.Error<List<MainListData>>(
-                            errorMessage.message ?: "An unexpected error occured"
+                        Resource.Error(
+                            errorMessage.message ?: "An unexpected error occurred"
                         )
                     )
                     cancel(errorMessage.message.toString())
                 }
-                value?.let {
-                    val list = it.toObjects(MainListData::class.java)
-                    Log.i(TAG, "repository get list = $list")
-                    trySend(Resource.Success<List<MainListData>>(list.toList()))
+                value?.let { querySnapshot ->
+                    val list = querySnapshot
+                        .toObjects(MainListData::class.java)
+                        .toList()
+                        .mapIndexed { index, mainListData ->
+                            mainListData.documentId = querySnapshot.documents[index].id
+                            mainListData
+                        }
+                    Log.i(TAG,"list in repository ${list}")
+                    trySend(
+                        Resource.Success(
+                            list
+                        )
+                    )
                 }
             }
 
         } catch (e: Exception) {
             Log.i(TAG, "repository get list error = ${e.message}")
             trySend(
-                Resource.Error<List<MainListData>>(
-                    e.message ?: "An unexpected error occured"
+                Resource.Error(
+                    e.message ?: "An unexpected error occurred"
                 )
             )
         } finally {

@@ -31,7 +31,7 @@ class CustomListDetailFragment : Fragment() {
         )
         return binding.apply {
             listPriceWeight.adapter = adapter
-            toolBar.apply {
+            includeToolbar.toolBar.apply {
                 title = args.customList.listName
                 setNavigationOnClickListener {
                     findNavController().popBackStack()

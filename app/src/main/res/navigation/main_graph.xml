@@ -16,9 +16,6 @@
         <action
             android:id="@+id/action_mainListFragment_to_companyListFragment"
             app:destination="@id/companyListFragment" />
-        <argument
-            android:name="customListName"
-            app:argType="string" />
         <action
             android:id="@+id/action_mainListFragment_to_mainListAddFragment"
             app:destination="@id/mainListAddFragment" />
@@ -41,17 +38,17 @@
     <fragment
         android:id="@+id/customListFragment"
         android:name="com.example.store.presentation.ui.fragments.CustomListFragment"
-        android:label="{customListName}"
+        android:label="customListData"
         tools:layout="@layout/fragment_custom_list" >
-        <argument
-            android:name="customListName"
-            app:argType="string" />
         <action
             android:id="@+id/action_customListFragment_to_customListAddFragment"
             app:destination="@id/customListAddFragment" />
         <action
             android:id="@+id/action_customListFragment_to_customListDetailFragment"
             app:destination="@id/customListDetailFragment" />
+        <argument
+            android:name="mainListData"
+            app:argType="com.example.store.repository.data.entities.MainListData" />
         <action
             android:id="@+id/action_customListFragment_to_mainListDetailFragment"
             app:destination="@id/mainListDetailFragment" />
@@ -82,7 +79,12 @@
         android:id="@+id/mainListAddFragment"
         android:name="com.example.store.presentation.ui.fragments.MainListAddFragment"
         android:label="List Info"
-        tools:layout="@layout/fragment_main_list_add" />
+        tools:layout="@layout/fragment_main_list_add" >
+        <argument
+            android:name="mainListId"
+            app:argType="com.example.store.repository.data.entities.MainListData"
+            app:nullable="true" />
+    </fragment>
     <fragment
         android:id="@+id/customListDetailFragment"
         android:name="com.example.store.presentation.ui.fragments.CustomListDetailFragment"
@@ -98,5 +100,12 @@
     <fragment
         android:id="@+id/mainListDetailFragment"
         android:name="com.example.store.presentation.ui.fragments.MainListDetailFragment"
-        android:label="MainListDetailFragment" />
+        tools:layout="@layout/fragment_main_list_detail"
+        android:label="MainListDetailFragment" >
+        <argument android:name="mainListId"
+            app:argType="com.example.store.repository.data.entities.MainListData" />
+        <action
+            android:id="@+id/action_mainListDetailFragment_to_mainListAddFragment"
+            app:destination="@id/mainListAddFragment" />
+    </fragment>
 </navigation>

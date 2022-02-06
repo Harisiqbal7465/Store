@@ -19,8 +19,10 @@ import com.example.store.utils.Resource
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class CustomListFragment : Fragment() {
     private var _binding: FragmentCustomListBinding? = null
@@ -28,6 +30,7 @@ class CustomListFragment : Fragment() {
     private val args: CustomListFragmentArgs by navArgs()
     private lateinit var customListAdapter: ListCustomListAdapter
     private lateinit var viewModel: CustomListViewModel
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -36,7 +39,7 @@ class CustomListFragment : Fragment() {
         _binding = FragmentCustomListBinding.inflate(layoutInflater, container, false)
 
         viewModel = ViewModelProvider(this)[CustomListViewModel::class.java]
-        (requireActivity() as MainActivity).setupActionBar(binding.toolBar)
+        (requireActivity() as MainActivity).setupActionBar(binding.includeToolbar.toolBar)
 
         customListAdapter = ListCustomListAdapter {
             findNavController().navigate(
@@ -45,19 +48,30 @@ class CustomListFragment : Fragment() {
         }
 
         adapterInilized()
+
         return binding.apply {
+            includeToolbar.toolBar.apply {
+                title = args.mainListData.listName
+            }
             fbListAdd.setOnClickListener {
                 findNavController().navigate(
                     CustomListFragmentDirections.actionCustomListFragmentToCustomListAddFragment(
-                        args.customListName
+                        args.mainListData.listName
                     )
+                )
+            }
+            includeToolbar.toolBar.setOnClickListener {
+                findNavController().navigate(
+                   CustomListFragmentDirections.actionCustomListFragmentToMainListDetailFragment(
+                       args.mainListData
+                   )
                 )
             }
         }.root
     }
 
     private fun adapterInilized() {
-        lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.getCustomList.collect { resources ->
                 when (resources) {
                     is Resource.Success -> {
@@ -75,7 +89,7 @@ class CustomListFragment : Fragment() {
                             activity?.findViewById(R.id.bottomNavigationView)!!
                         Snackbar.make(
                             bottomNavView,
-                            resources.message ?: "An unexpected error occured",
+                            resources.message ?: "An unexpected error occurred",
                             Snackbar.LENGTH_SHORT
                         ).apply {
                             anchorView = bottomNavView
@@ -85,17 +99,6 @@ class CustomListFragment : Fragment() {
             }
         }
     }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.getAllList(args.customListName)
-    }
-
-    override fun onStart() {
-        super.onStart()
-        adapterInilized()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

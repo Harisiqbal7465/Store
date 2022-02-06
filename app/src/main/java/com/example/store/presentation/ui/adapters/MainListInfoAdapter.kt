@@ -10,7 +10,7 @@ import com.example.store.repository.data.entities.MainListData
 
 
 class MainListInfoAdapter(
-    private val listener :(String,String) -> Unit
+    private val listener :(MainListData) -> Unit
 ): RecyclerView.Adapter<MainListInfoAdapter.ViewHolder>(){
 
     class ViewHolder(val binding: ListMainListBinding): RecyclerView.ViewHolder(binding.root)
@@ -31,7 +31,7 @@ class MainListInfoAdapter(
             tvMainListName.text = currentItem.listName
             tvMainListType.text = currentItem.listType
             mainList.setOnClickListener {
-                listener(currentItem.listType,currentItem.listName)
+                listener(currentItem)
             }
         }
     }

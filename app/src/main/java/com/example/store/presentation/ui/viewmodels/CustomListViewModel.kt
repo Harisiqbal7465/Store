@@ -6,6 +6,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.store.repository.MainRepository
 import com.example.store.repository.data.entities.CustomListData
+import com.example.store.repository.data.entities.MainListData
 import com.example.store.utils.Constant.TAG
 import com.example.store.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@ExperimentalCoroutinesApi
 @HiltViewModel
 class CustomListViewModel @Inject constructor(
     private val repository: MainRepository,
@@ -24,15 +26,16 @@ class CustomListViewModel @Inject constructor(
 ) : ViewModel(){
 
     init {
-        savedStateHandle.get<String>("customListName")?.let { listName ->
-            Log.i(TAG,"ListName = $listName")
-            getAllList(listName)
+        savedStateHandle.get<MainListData>("mainListData")?.let {
+            Log.i(TAG," in viewmodel ${it.documentId}")
+            getAllList(it.documentId)
         }
     }
 
     private val _getCustomList = MutableStateFlow<Resource<List<CustomListData>>>(Resource.Loading())
     val getCustomList: StateFlow<Resource<List<CustomListData>>>
         get() = _getCustomList
+
 
 
     fun getAllList(listName: String) {

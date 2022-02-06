@@ -1,12 +1,10 @@
 package com.example.store.presentation.ui.fragments
 
-import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -16,6 +14,7 @@ import com.example.store.databinding.FragmentMainListBinding
 import com.example.store.presentation.ui.MainActivity
 import com.example.store.presentation.ui.viewmodels.MainViewModel
 import com.example.store.presentation.ui.adapters.MainListInfoAdapter
+import com.example.store.repository.data.entities.MainListData
 import com.example.store.utils.Resource
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.snackbar.Snackbar
@@ -39,24 +38,24 @@ class MainListFragment : Fragment() {
 
         (requireActivity() as MainActivity).setupActionBar(binding.toolBar)
 
-        val mainListAdapter = MainListInfoAdapter { listType, listName ->
-            if (listType == requireContext().resources.getString(R.string.custom_list)) {
+        val mainListAdapter = MainListInfoAdapter { mainListData ->
+            if (mainListData.listType == requireContext().resources.getString(R.string.custom_list)) {
                 findNavController().navigate(
                     MainListFragmentDirections.actionMainListFragmentToCustomListFragment(
-                        listName
+                        mainListData
                     )
                 )
             } else {
                 findNavController().navigate(
                     MainListFragmentDirections.actionMainListFragmentToCompanyListFragment(
-                        listName
+                        mainListData.listName
                     )
                 )
             }
         }
 
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-        lifecycleScope.launchWhenCreated {
+        viewLifecycleOwner.lifecycleScope.launchWhenStarted {
             viewModel.listOfMainListDataStatus.collectLatest { resources ->
                 when (resources) {
                     is Resource.Success -> {
@@ -85,17 +84,13 @@ class MainListFragment : Fragment() {
         }
 
         binding.fButtonAdd.setOnClickListener {
-            findNavController().navigate(R.id.action_mainListFragment_to_mainListAddFragment)
+            findNavController().navigate(
+                MainListFragmentDirections.actionMainListFragmentToMainListAddFragment(null)
+            )
         }
 
         return binding.root
     }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.getAllListOfMainList()
-    }
-
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null

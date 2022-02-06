@@ -1,0 +1,12 @@
+<com.google.android.material.appbar.MaterialToolbar android:id="@+id/toolBar"
+    android:layout_width="match_parent"
+    android:layout_height="?attr/actionBarSize"
+    android:elevation="0dp"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    android:background="@color/green_dark_shade"
+    android:theme="@style/ThemeOverlay.MaterialComponents.Dark.ActionBar"
+    app:titleMargin="0dp"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" />
