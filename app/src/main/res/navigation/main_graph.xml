@@ -19,6 +19,12 @@
         <action
             android:id="@+id/action_mainListFragment_to_mainListAddFragment"
             app:destination="@id/mainListAddFragment" />
+        <action
+            android:id="@+id/action_mainListFragment_to_mainListDetailFragment"
+            app:destination="@id/mainListDetailFragment" />
+        <action
+            android:id="@+id/mainListSearchFragment"
+            app:destination="@id/mainListSearchFragment" />
     </fragment>
     <fragment
         android:id="@+id/stockFragment"
@@ -38,8 +44,7 @@
     <fragment
         android:id="@+id/customListFragment"
         android:name="com.example.store.presentation.ui.fragments.CustomListFragment"
-        android:label="customListData"
-        tools:layout="@layout/fragment_custom_list" >
+        tools:layout="@layout/fragment_custom_list">
         <action
             android:id="@+id/action_customListFragment_to_customListAddFragment"
             app:destination="@id/customListAddFragment" />
@@ -52,6 +57,12 @@
         <action
             android:id="@+id/action_customListFragment_to_mainListDetailFragment"
             app:destination="@id/mainListDetailFragment" />
+        <action
+            android:id="@+id/action_customListFragment_to_customListDetailFragment2"
+            app:destination="@id/customListDetailFragment" />
+        <action
+            android:id="@+id/customListSearchFragment"
+            app:destination="@id/customListSearchFragment" />
     </fragment>
     <dialog
         android:id="@+id/bottomSheetDialogMainListFragment"
@@ -69,17 +80,23 @@
     <fragment
         android:id="@+id/customListAddFragment"
         android:name="com.example.store.presentation.ui.fragments.CustomListAddFragment"
-        android:label="@string/add_custom_list"
-        tools:layout="@layout/fragment_custom_list_add" >
+        tools:layout="@layout/fragment_custom_list_add">
         <argument
             android:name="customListName"
             app:argType="string" />
+        <argument
+            android:name="customListData"
+            app:argType="com.example.store.repository.data.entities.CustomListData"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_customListAddFragment_to_customListDetailFragment"
+            app:destination="@id/customListDetailFragment"
+            app:popUpTo="@id/customListFragment" />
     </fragment>
     <fragment
         android:id="@+id/mainListAddFragment"
         android:name="com.example.store.presentation.ui.fragments.MainListAddFragment"
-        android:label="List Info"
-        tools:layout="@layout/fragment_main_list_add" >
+        tools:layout="@layout/fragment_main_list_add">
         <argument
             android:name="mainListId"
             app:argType="com.example.store.repository.data.entities.MainListData"
@@ -100,12 +117,22 @@
     <fragment
         android:id="@+id/mainListDetailFragment"
         android:name="com.example.store.presentation.ui.fragments.MainListDetailFragment"
-        tools:layout="@layout/fragment_main_list_detail"
-        android:label="MainListDetailFragment" >
-        <argument android:name="mainListId"
+        tools:layout="@layout/fragment_main_list_detail">
+        <argument
+            android:name="mainListId"
             app:argType="com.example.store.repository.data.entities.MainListData" />
         <action
             android:id="@+id/action_mainListDetailFragment_to_mainListAddFragment"
             app:destination="@id/mainListAddFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/mainListSearchFragment"
+        android:name="com.example.store.MainListSearchFragment"
+        android:label="fragment_main_list_search"
+        tools:layout="@layout/fragment_main_list_search" />
+    <fragment
+        android:id="@+id/customListSearchFragment"
+        android:name="com.example.store.CustomListSearchFragment"
+        android:label="fragment_custom_list_search"
+        tools:layout="@layout/fragment_custom_list_search" />
 </navigation>

@@ -7,6 +7,7 @@ import com.example.store.utils.Constant.TAG
 import com.example.store.utils.Resource
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ListenerRegistration
+import com.google.firebase.firestore.SetOptions
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.channels.awaitClose
@@ -16,7 +17,12 @@ import kotlinx.coroutines.tasks.await
 
 
 class MainRepository {
-    private val mainList = FirebaseFirestore.getInstance().collection("mainList")
+
+    companion object {
+        const val MAIN_LIST_NAME = "mainList"
+    }
+
+    private val mainList = FirebaseFirestore.getInstance().collection(MAIN_LIST_NAME)
 
     fun insertMainList(mainListData: MainListData) = flow<Resource<Any>> {
         try {
@@ -30,7 +36,7 @@ class MainRepository {
     }
 
     fun insertCustomList(collectionName: String, customListData: CustomListData) =
-        flow{
+        flow {
             try {
                 emit(Resource.Loading())
                 mainList.document(collectionName).collection(collectionName)
@@ -46,13 +52,12 @@ class MainRepository {
             }
         }
 
-
     fun allReadyExistAddMainList(listName: String) = flow {
         try {
             emit(Resource.Loading())
             val result = mainList.whereEqualTo("listName", listName).get().await()
                 .toObjects(MainListData::class.java).toList()
-            Log.i(TAG,"already exist ${result.isNotEmpty()}")
+            Log.i(TAG, "already exist ${result.isNotEmpty()}")
             emit(Resource.Success(result.isNotEmpty()))
         } catch (e: Exception) {
             emit(
@@ -66,7 +71,8 @@ class MainRepository {
     fun getMainListInfo(listId: String) = flow<Resource<MainListData>> {
         try {
             emit(Resource.Loading())
-            val result = mainList.document(listId).get().await().toObject(MainListData::class.java)!!
+            val result =
+                mainList.document(listId).get().await().toObject(MainListData::class.java)!!
             emit(Resource.Success(result))
         } catch (e: Exception) {
             emit(
@@ -132,7 +138,7 @@ class MainRepository {
                             mainListData.documentId = querySnapshot.documents[index].id
                             mainListData
                         }
-                    Log.i(TAG,"list in repository ${list}")
+                    Log.i(TAG, "list in repository ${list}")
                     trySend(
                         Resource.Success(
                             list
@@ -153,4 +159,90 @@ class MainRepository {
         }
     }
 
+    fun updateMainList(mainListId: String, mainListData: MainListData) = flow<Resource<Any>> {
+        try {
+            val map = mapOf<String, Any>(
+                "listName" to mainListData.listName,
+                "listType" to mainListData.listType
+            )
+            emit(Resource.Loading())
+            mainList.document(mainListId).update(
+                map
+            ).await()
+            emit(Resource.Success(Any()))
+        } catch (e: Exception) {
+            Log.i(TAG, "error ${e.message} ?: An unexpected error occurred")
+            emit(Resource.Error(e.message ?: "An unexpected error occurred"))
+        }
+    }
+
+    fun deleteMainList(mainListId: String) = flow<Resource<Any>> {
+        try {
+            emit(Resource.Loading())
+            mainList.document(mainListId).delete().await()
+            emit(Resource.Success(Any()))
+        } catch (e: Exception) {
+            Log.i(TAG, "error ${e.message} ?: An unexpected error occurred")
+            emit(Resource.Error(e.message ?: "An unexpected error occurred"))
+        }
+    }
+
+    fun updateCustomList(mainListId: String, customListId: String, customListData: CustomListData) =
+        flow<Resource<Any>> {
+            try {
+                val map = mapOf<String, Any>(
+                    "listName" to customListData.listName,
+                    "priceList" to customListData.priceList,
+                    "weightList" to customListData.weightList
+                )
+                emit(Resource.Loading())
+                mainList.document(mainListId).collection(mainListId).document(customListId).update(
+                    map
+                ).await()
+                emit(Resource.Success(Any()))
+            } catch (e: Exception) {
+                Log.i(TAG, "error ${e.message} ?: An unexpected error occurred")
+                emit(Resource.Error(e.message ?: "An unexpected error occurred"))
+            }
+        }
+
+    fun deleteCustomList(mainListId: String, customListId: String) = flow<Resource<Any>> {
+        try {
+            emit(Resource.Loading())
+            mainList.document(mainListId).collection(mainListId).document(customListId).delete()
+                .await()
+            emit(Resource.Success(Any()))
+        } catch (e: Exception) {
+            Log.i(TAG, "error ${e.message} ?: An unexpected error occurred")
+            emit(Resource.Error(e.message ?: "An unexpected error occurred"))
+        }
+    }
+
+    fun searchMainList(text: String) = flow<Resource<List<MainListData>>> {
+        try {
+            emit(Resource.Loading())
+            val result = mainList
+                .whereGreaterThanOrEqualTo("listName", text)
+                .get().await()
+                .toObjects(MainListData::class.java).toList()
+            emit(Resource.Success(result))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "An unexpected error occurred"))
+        }
+    }
+    fun searchCustomList(mainListId: String,text: String) = flow<Resource<List<CustomListData>>> {
+        try {
+            emit(Resource.Loading())
+            val result = mainList
+                .document(mainListId)
+                .collection(mainListId)
+                .whereGreaterThanOrEqualTo("listName", text)
+                .get().await()
+                .toObjects(CustomListData::class.java).toList()
+            Log.i(TAG,"List = $result")
+            emit(Resource.Success(result))
+        } catch (e: Exception) {
+            emit(Resource.Error(e.message ?: "An unexpected error occurred"))
+        }
+    }
 }

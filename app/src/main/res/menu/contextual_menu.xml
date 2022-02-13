@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/item_delete"
+        android:icon="@drawable/ic_delete_24"
+        app:showAsAction="ifRoom|withText"
+        android:title="@string/delete"
+        android:iconTint="@color/white"
+        android:titleCondensed="@string/delete"/>
+   <!-- <item
+        android:id="@+id/edit_list"
+        android:title="@string/edit"
+        android:icon="@drawable/ic_edit_24"
+        app:showAsAction="ifRoom|withText"
+        android:iconTint="@color/white"
+        />
+    <item
+        android:id="@+id/info_list"
+        android:title="@string/info"
+        android:icon="@drawable/ic_info_24"
+        app:showAsAction="ifRoom|withText"
+        android:iconTint="@color/white"-->
+        />
+</menu>

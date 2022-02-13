@@ -2,6 +2,7 @@ package com.example.store.presentation.ui.adapters
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
@@ -11,6 +12,7 @@ import com.example.store.repository.data.entities.CustomListData
 
 
 class ListCustomListAdapter(
+    private val popupMenu: (View, CustomListData) -> Unit,
     private val listener :(CustomListData) -> Unit
 ): RecyclerView.Adapter<ListCustomListAdapter.ViewHolder>(){
 
@@ -30,12 +32,13 @@ class ListCustomListAdapter(
         val currentItem = customListData[position]
         holder.binding.apply {
             tvCustomItemName.text = currentItem.listName
-            Log.i("size","${currentItem.priceList[0]}")
-            Log.i("size","${currentItem.weightList[0]}")
             ("Rs ${currentItem.priceList[0]}").also { tvPrice.text = it }
             ("${currentItem.weightList[0]}g").also { tvWeight.text = it }
             mainList.setOnClickListener {
                 listener(currentItem)
+            }
+            ibMore.setOnClickListener {
+                popupMenu(it,currentItem)
             }
         }
     }
